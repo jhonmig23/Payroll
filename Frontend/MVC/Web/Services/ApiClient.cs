@@ -18,7 +18,10 @@ namespace Web.Services
 
         public async Task<List<EmployeeViewModel>> GetEmployeesAsync()
         {
-            var result = await _httpClient.GetFromJsonAsync<List<EmployeeViewModel>>("api/employees");
+            var response = await _httpClient.GetAsync("api/employees");
+            response.EnsureSuccessStatusCode();
+
+            var result = await response.Content.ReadFromJsonAsync<List<EmployeeViewModel>>();
             if (result == null)
             {
                 throw new InvalidOperationException("API returned successful response but failed to deserialize employee list.");
@@ -28,7 +31,10 @@ namespace Web.Services
 
         public async Task<EmployeeViewModel> GetEmployeeAsync(int id)
         {
-            var result = await _httpClient.GetFromJsonAsync<EmployeeViewModel>($"api/employees/{id}");
+            var response = await _httpClient.GetAsync($"api/employees/{id}");
+            response.EnsureSuccessStatusCode();
+
+            var result = await response.Content.ReadFromJsonAsync<EmployeeViewModel>();
             if (result == null)
             {
                 throw new InvalidOperationException($"API returned successful response but failed to deserialize employee with ID {id}.");
@@ -64,7 +70,10 @@ namespace Web.Services
 
         public async Task<decimal> ComputePayAsync(int employeeId)
         {
-            var result = await _httpClient.GetFromJsonAsync<decimal>($"api/employees/compute-pay?employeeId={employeeId}");
+            var response = await _httpClient.GetAsync($"api/employees/compute-pay?employeeId={employeeId}");
+            response.EnsureSuccessStatusCode();
+
+            var result = await response.Content.ReadFromJsonAsync<decimal>();
             if (result == null)
             {
                 throw new InvalidOperationException("API returned successful response but failed to deserialize pay amount.");

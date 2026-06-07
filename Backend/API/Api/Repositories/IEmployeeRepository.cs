@@ -12,5 +12,6 @@ namespace Api.Repositories
         Task<Employee> AddAsync(Employee employee);
         Task<Employee> UpdateAsync(Employee employee);
         Task DeleteAsync(int id);
+        Task<T> ExecuteScalarAsync<T>(string sql, params object[] parameters);
     }
 }

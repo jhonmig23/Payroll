@@ -26,6 +26,21 @@
     </div>
 </div>
 
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="alert alert-danger">
+                <h4>Error: @ViewBag.ErrorMessage</h4>
+                @if (ViewBag.ErrorStatusCode != null)
+                {
+                    <p>Status Code: @ViewBag.ErrorStatusCode</p>
+                }
+            </div>
+        </div>
+    </div>
+}
+
 @if (ViewBag.ComputedPay != null)
 {
     <div class="row mt-4">

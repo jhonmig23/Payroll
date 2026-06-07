@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="cookies3.txt" />
+    <None Remove="cookies4.txt" />
+    <None Remove="cookies6.txt" />
+    <None Remove="cookies7.txt" />
   </ItemGroup>
 
 </Project>
