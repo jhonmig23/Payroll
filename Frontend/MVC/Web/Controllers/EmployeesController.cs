@@ -131,9 +131,24 @@ namespace Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ComputePay(int employeeId)
         {
-            var pay = await _apiClient.ComputePayAsync(employeeId);
-            ViewBag.ComputedPay = pay;
-            ViewBag.EmployeeId = employeeId;
+            try
+            {
+                var pay = await _apiClient.ComputePayAsync(employeeId);
+                ViewBag.ComputedPay = pay;
+                ViewBag.EmployeeId = employeeId;
+            }
+            catch (HttpRequestException ex)
+            {
+                // Handle HTTP errors (like 500 Internal Server Error)
+                ViewBag.ErrorMessage = $"Error calculating pay: {ex.Message}";
+                ViewBag.ErrorStatusCode = ((int)ex?.StatusCode).ToString();
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                ViewBag.ErrorMessage = $"An error occurred: {ex.Message}";
+            }
+
             var employees = await _apiClient.GetEmployeesAsync();
             return View(employees);
         }

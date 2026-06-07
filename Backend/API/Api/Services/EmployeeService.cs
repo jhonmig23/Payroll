@@ -8,6 +8,7 @@ using Api.Data;
 using Api.Models;
 using Api.DTOs;
 using Api.Repositories;
+using Microsoft.Data.SqlClient;
 
 namespace Api.Services
 {
@@ -73,25 +74,21 @@ namespace Api.Services
 
         public async Task<decimal> ComputePayAsync(int employeeId)
         {
-            var employee = await _repository.GetByIdAsync(employeeId);
-            if (employee == null)
-                throw new KeyNotFoundException("Employee not found");
+            // Call the stored procedure to compute pay
+            var result = await _repository.ExecuteScalarAsync<decimal>(
+                "EXEC ComputePayAsync @EmployeeId",
+                new SqlParameter("@EmployeeId", employeeId));
 
-            int numberOfWorkingDays = employee.WorkingDays switch
+            // If the stored procedure returns null or 0, check if employee exists
+            // (the stored procedure returns 0 for non-existent employees)
+            if (result == 0)
             {
-                "MWF" => 3,
-                "TTHS" => 2,
-                _ => 0
-            };
+                var employee = await _repository.GetByIdAsync(employeeId);
+                if (employee == null)
+                    throw new KeyNotFoundException("Employee not found");
+            }
 
-            decimal dailyRate = employee.DailyRate;
-            decimal basePay = numberOfWorkingDays * dailyRate * 2;
-
-            bool isBirthday = DateTime.Today.Month == employee.DateOfBirth.Month &&
-                              DateTime.Today.Day == employee.DateOfBirth.Day;
-            decimal birthdayBonus = isBirthday ? dailyRate : 0m;
-
-            return basePay + birthdayBonus;
+            return result;
         }
 
         private string GenerateEmployeeNumber(string lastName, DateTime dateOfBirth)
