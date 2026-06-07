@@ -1,0 +1,28 @@
+# Visual Studio user-specific files
+.vs/
+# Build output
+bin/
+obj/
+# User-specific project files
+*.user
+*.csproj.user
+# Logs
+*.log
+# Temporary files
+*.tmp
+# IDE folders
+.idea/
+*.slnx
+# Package files
+*.nupkg
+# The dotnet CLI tools folder
+.dotnet/
+# Environment variables
+.env
+# Test results
+TestResults/
+# Coverage files
+coverlet/
+# OS files
+.DS_Store
+Thumbs.db
