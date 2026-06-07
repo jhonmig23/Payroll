@@ -33,7 +33,7 @@ namespace Api.Repositories
             return employee;
         }
 
-        public async Task UpdateAsync(Employee employee)
+        public async Task<Employee> UpdateAsync(Employee employee)
         {
             _context.Employees.Update(employee);
             await _context.SaveChangesAsync();
